@@ -4,6 +4,8 @@
 #include <Wire.h>
 #include "wiring_private.h"
 
+#define DEBUG true
+
 #define esp8266 Serial5
 
 #define DS3231_RTC 0x68
@@ -34,7 +36,7 @@ int alarmNumCount = -1;
 String* alarmName = new String[100];
 
 int musicNum = 1;
-bool icChange = false;
+bool isChange = false;
 
 int nowVolume;
 int maxVolume, duration, volumeDelay;
@@ -98,10 +100,10 @@ void loop() {
     getTime();
   }
 
-  if (second == 0) {
+  if (!mode && second == 0) {
     displayTime();
     if (!isRun && !checkAlarm) {
-      SerialUSB.println("checkAlarm");
+      debugMessage("checkAlarm");
       checkAlarm = true;
       checkAlarmSeq = 0;
       checkAlarmTime = millis() - 20000;
@@ -110,25 +112,25 @@ void loop() {
 
   if (motionTime + 1000 < nowTime) {
     if (digitalRead(MOTION_PIN)) {
-      SerialUSB.println("Detection (HIGH Signal)");
+      debugMessage("Detection (HIGH Signal)");
       isMove = true;
       motionTime = millis() + 300000 ;
     }
     else {
-      SerialUSB.println("Nothing (LOW Signal)");
+      debugMessage("Nothing (LOW Signal)");
       isMove = false;
       motionTime = millis();
     }
   }
 
-  if (icChange) {
-    SerialUSB.println("save start");
+  if (isChange) {
+    debugMessage("save start");
     musicNum = dfp.readCurrentFileNumber();
     saveData(alarmNum, musicNum);
-    icChange = false;
-    SerialUSB.println("save end");
+    isChange = false;
+    debugMessage("save end");
   }
-  
+
   if (isRun) {
     if (alarmStopTime <= nowTime) {
       stopAlarm();
@@ -141,14 +143,14 @@ void loop() {
 
   if (!mode && !isRun && checkAlarm) {
     if (checkAlarmSeq == 0 && (checkAlarmTime + 20000 <= nowTime)) {
-      SerialUSB.println("startCheck");
+      debugMessage("startCheck");
       esp8266.println("AT+CIPSTART=\"TCP\",\"14.45.224.136\",3000");
       esp8266.flush();
       if (esp8266.find("OK")) {
-        SerialUSB.println("TCP Connect Success");
+        debugMessage("TCP Connect Success");
         checkAlarmSeq = 1;
       } else {
-        SerialUSB.println("TCP Connect Fail");
+        debugMessage("TCP Connect Fail");
         checkAlarmSeq = 0;
       }
       checkAlarmTime = millis();
@@ -161,7 +163,7 @@ void loop() {
     }
     else if (checkAlarmSeq == 2 && (checkAlarmTime + 300 <= nowTime)) {
       if (esp8266.find(">")) {
-        SerialUSB.println("sending...");
+        debugMessage("sending...");
         esp8266.println(checkAlarmCmd);
         esp8266.println();
         esp8266.flush();
@@ -173,7 +175,7 @@ void loop() {
           String maxVolumeStr = (json["maxVolume"]);
           maxVolume = maxVolumeStr.toInt();
           if (!(su == "")) {
-            SerialUSB.println("Find");
+            debugMessage("Find");
             String maxVolumeStr = (json["maxVolume"]);
             maxVolume = maxVolumeStr.toInt();
             String durationStr = (json["duration"]);
@@ -184,11 +186,11 @@ void loop() {
             volumeDelay =  (volumeDelay * 60000) / (maxVolume - 5);
             volumeUpTime = millis() + volumeDelay;
             startAlarm();
-            SerialUSB.println(maxVolume);
-            SerialUSB.println(duration);
-            SerialUSB.println(volumeDelay);
+            debugMessage(maxVolume);
+            debugMessage(duration);
+            debugMessage(volumeDelay);
           } else {
-            SerialUSB.println("cant Find");
+            debugMessage("cant Find");
           }
         }
         esp8266.println("AT+CIPCLOSE");
@@ -200,49 +202,49 @@ void loop() {
 }
 
 void connectWifi() {
-  SerialUSB.println("connecting wifi");
+  debugMessage("connecting wifi");
   esp8266.begin(9600);
   esp8266.println("AT+RST");
   delay(500);
   esp8266.flush();
   if (esp8266.find("OK")) {
-    SerialUSB.println("Reset OK");
+    debugMessage("Reset OK");
   }
   esp8266.println("AT+CIOBAUD=9600");
   delay(500);
   esp8266.flush();
   if (esp8266.find("OK")) {
-    SerialUSB.println("Baud Change OK");
+    debugMessage("Baud Change OK");
   }
   esp8266.println("AT+CWMODE=1");
   delay(500);
   esp8266.flush();
   if (esp8266.find("OK")) {
-    SerialUSB.println("Mode Change OK");
+    debugMessage("Mode Change OK");
   }
   esp8266.println("AT+CWJAP=\"wevo\",\"\"");
   delay(5000);
   esp8266.flush();
   if (esp8266.find("OK")) {
-    SerialUSB.println("Wifi Connect OK");
+    debugMessage("Wifi Connect OK");
   }
 
   esp8266.println("AT+CIPSTART=\"TCP\",\"14.45.224.136\",3000");
   delay(1000);
   esp8266.flush();
   if (esp8266.find("OK")) {
-    SerialUSB.println("tcp Connect OK");
+    debugMessage("tcp Connect OK");
   }
   checkAlarmCmd = "GET /api/start/" + String(alarmNum);
   esp8266.println("AT+CIPSEND=" + String(checkAlarmCmd.length() + 4));
   delay(1000);
   esp8266.flush();
   if (esp8266.find(">")) {
-    SerialUSB.println("ready OK");
+    debugMessage("ready OK");
   }
   esp8266.println(checkAlarmCmd);
   esp8266.println();
-  SerialUSB.println("start start");
+  debugMessage("start start");
   esp8266.flush();
   if (esp8266.available()) {
     http = esp8266.readString();
@@ -250,10 +252,6 @@ void connectWifi() {
     JsonObject& json = jsonBuffer.parseObject(parseJson(http));
     String lengthStr = (json["length"]);
     alarmNumCount = lengthStr.toInt();
-    for (int i = 0; i < alarmNumCount; i++) {
-      String name = json[String(i + 1)];
-      alarmName[i] = name;
-    }
     String timeData = json["time"];
     setTime(timeData);
     displayTime();
@@ -385,10 +383,10 @@ void saveData(int alarmNum, int musicNum) {
 void readOkBtn() {
   if (btnTime + 500 < millis()) {
     if (mode != 0) {
-      SerialUSB.println("okbtn push");
+      debugMessage("okbtn push");
       dfp.stop();
       mode = 0;
-      icChange = true;
+      isChange = true;
       displayTime();
       btnTime = millis();
     }
@@ -409,7 +407,7 @@ void readStopBtn() {
     } else {
       stopAlarm();
     }
-    SerialUSB.println("stopbtn push");
+    debugMessage("stopbtn push");
     btnTime = millis();
   }
 }
@@ -427,8 +425,19 @@ void readChangeBtn() {
       displayUser(alarmNum + 1);
       mode = 1;
     }
-    SerialUSB.println("choicebtn push");
+    debugMessage("choicebtn push");
     btnTime = millis();
+  }
+}
+
+void debugMessage(int message) {
+  if (DEBUG) {
+    SerialUSB.println(message);
+  }
+}
+void debugMessage(String message) {
+  if (DEBUG) {
+    SerialUSB.println(message);
   }
 }
 
