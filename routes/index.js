@@ -1,6 +1,6 @@
 var moment = require('moment');
-var ipFinderAccessKey = "947501ebc5f2cabd80b864ec4b08ac5be99250906db4da8cda9073825c8524ec"; 
-var openWeaterMapAccessKey ="66ee59a78a506abaf0759b1004440c65";
+var ipFinderAccessKey = "you Need Your AccessKey"; 
+var openWeaterMapAccessKey ="you Need Your AccessKey";
 
 module.exports.user = function (app, User, request) {
     app.get('/api/start/:arduino', function (req, res) {
