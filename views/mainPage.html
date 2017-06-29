@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/timedropper.js"></script>
+    <script src="js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/timedropper.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link href='https://fonts.googleapis.com/css?family=Quantico' rel='stylesheet' type='text/css'>
+
+    <meta charset="UTF-8">
+    <title>Easy Morning</title>
+</head>
+
+<body>
+    <div id="menu">
+        <div id="userMenu">
+            <input type="button" class="long" id="addUser" value="User Add" />
+            <input type="button" class="long" id="deleteUser" value="User Delete" />
+        </div>
+        <div id="users">
+
+        </div>
+        <div id="alarmMenu">
+            <input type="button" class="btn" id="main" value="Alarm" />
+            <input type="button" class="btn" id="option" value="Option" />
+        </div>
+    </div>
+
+    <div id="noUserMessage">
+        <label>if you want to do things, please add user.</label>
+    </div>
+
+    <div id="mainBody">
+        <div id="dayBtnSet">
+            <input type="button" class="btn dayBtn" value="Mon" id="0" />
+            <input type="button" class="btn dayBtn" value="Tue" id="0" />
+            <input type="button" class="btn dayBtn" value="Wed" id="0" />
+            <input type="button" class="btn dayBtn" value="Thu" id="0" />
+            <input type="button" class="btn dayBtn" value="Fri" id="0" />
+            <input type="button" class="btn dayBtn" value="Sat" id="0" />
+            <input type="button" class="btn dayBtn" value="Sun" id="0" />
+        </div>
+
+        <div id="timeChoicer">
+            <input type="text" id="alarm" style="text-align:center;" />
+            <input type="button" class="btn" id="addAlarmBtn" value="Add" />
+        </div>
+        <div id="alarmList">
+            <table class="ListTable">
+
+            </table>
+        </div>
+    </div>
+
+    <div id="optionBody">
+        <div id="optionBtn">
+            <label id="completeMessage" style="display:none">Save Complete!!</label>
+            <input type="button" id="saveBtn" value="SAVE" />
+        </div>
+        <div id="optionController">
+            <div>
+                <label style="float:left;">Volume</label>
+                <div>
+                    <input type="range" name="volume" id="volume" class="optionBar" value="15" min="0" max="30" />
+                    <label style="float:left;">0</label><label style="float:right;">30</label>
+                    <output id="volumeValue" for="volume" style="float:center;">15</output>
+                </div>
+            </div>
+            <div>
+                <label style="float:left;">Alarm duration</label>
+                <div>
+                    <input type="range" name="length" id="length" class="optionBar" value="30" min="5" max="120" />
+                    <label style="float:left;">5min</label><label style="float:right;">120min</label>
+                    <output id="lengthValue" for="length" style="float:center;">30min</output>
+                </div>
+            </div>
+            <div>
+                <label style="float:left;">Slowly increase volume</label>
+                <div>
+                    <input type="range" name="volumeDelay" id="volumeDelay" class="optionBar" value="30" min="0" max="120" />
+                    <label style="float:left;">0min</label><label style="float:right;">120min</label>
+                    <output id="volumeDelayValue" for="volumeDelay" style="float:center;">30min</output>
+                </div>
+            </div>
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <label style="float:left;">Check shallow sleep state</label>
+                            <label style="float:left;font-size:12px;">It can happen comfortably</label>
+                            <label style="float:left;font-size:12px;">by checking the state of sleep.</label>
+                        </td>
+                        <td class="toggleItem">
+                            <div class="toggle">
+                                <input type="checkbox" id='checkMotion' class="cmn-toggle cmn-toggle-round">
+                                <label for='checkMotion'></label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label style="float:left;">Check Weather</label>
+                            <label style="float:left;font-size:12px;">It rings early according to the weather.</label>
+                        </td>
+                        <td class="toggleItem">
+                            <div class="toggle">
+                                <input type="checkbox" id='checkWeather' class="cmn-toggle cmn-toggle-round">
+                                <label for='checkWeather'></label>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    $("#alarm").timeDropper();
+
+    $(document).ready(function () {
+        $("#volume").change(function () {
+            $("#volume").next().next().next().html($(this).val());
+        });
+
+        $("#length").change(function () {
+            $("#length").next().next().next().html($(this).val() + "min");
+            if (parseInt($(this).val()) < parseInt($("#volumeDelay").val())) {
+                $("#volumeDelay").val($(this).val());
+            }
+            $("#volumeDelay").attr("max", $(this).val());
+            $("#volumeDelay").next().next().html($(this).val() + "min");
+            $("#volumeDelay").next().next().next().html($("#volumeDelay").val() + "min");
+
+        });
+
+        $("#volumeDelay").change(function () {
+            $("#volumeDelay").next().next().next().html($(this).val() + "min");
+        });
+    });
+
+</script>
+
+</html>

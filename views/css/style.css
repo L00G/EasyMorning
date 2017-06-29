@@ -1,0 +1,269 @@
+input{
+    font-family: "Quantico", sans-serif;
+}
+input[type=button]{
+    font-family: "Quantico", sans-serif;
+}
+label{
+    font-family: "Quantico", sans-serif;
+}
+
+#mainBody ,#optionBody, #alarmMenu ,#noUserMessage, #users{
+    display: none;
+}
+
+.btn{
+    background-color:papayawhip; /* Green */
+    padding: 0px;
+    width: 40px;
+    border: none;
+    
+}
+
+.long{
+    background-color:papayawhip; /* Green */
+    padding: 0px;
+    width: 80px;
+    border: none;
+}
+
+.long[id="deleteUser"]{
+    float: right;
+}
+
+.dayBtn {
+    background-color:white; /* Green */
+    color: #000000;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+}
+
+#menu #userMenu{
+    position:absolute;
+    width: 300px;
+    height: auto;
+    top: 10px; 
+    left: 0; 
+    bottom: 0; 
+    right: 0; 
+    margin: 0 auto;
+}
+
+#users{
+    position:absolute;
+    width: 300px;
+    height: auto;
+    top: 40px; 
+    left: 0; 
+    bottom: 0; 
+    right: 0; 
+    margin: 0 auto;
+}
+
+.user{
+    background-color:white; /* Green */
+    color: #bdc3c7;
+    padding: 0px;
+    width: auto;
+    padding-left: 5px; 
+    padding-right: 5px;
+    border: none;
+}
+
+#noUserMessage{
+    position:absolute;
+    width: 300px;
+    height: auto;
+    top: 40px; 
+    left: 0; 
+    bottom: 0; 
+    right: 0; 
+    margin: 0 auto;
+}
+
+#menu #alarmMenu{
+    position:absolute;
+    width: 300px;
+    height: auto;
+    top: 70px; 
+    left: 0; 
+    bottom: 0; 
+    right: 0; 
+    margin: 0 auto;
+    text-align: center;
+}
+
+#menu #alarmMenu .btn{
+    background-color: white;
+    font-size: 25px;
+    width: 40%;
+}
+
+#dayBtnSet{
+    position:absolute;
+    width: 300px;
+    height: auto;
+    top: 110px; 
+    left: 0; 
+    bottom: 0; 
+    right: 0; 
+    margin: 0 auto;
+    font-size: 12px;
+}
+
+#timeChoicer{
+    position:absolute;
+    width: 300px;
+    height: auto;
+    top: 140px; 
+    left: 0; 
+    bottom: 0; 
+    right: 0; 
+    margin: 0 auto;
+    text-align: center;
+}
+
+#alarmList{
+    position:absolute;
+    width: 300px;
+    height: auto;
+    top: 165px; 
+    left: 0; 
+    bottom: 0; 
+    right: 0; 
+    margin: 0 auto;
+    text-align: center;
+}
+
+#alarmList .ListTable td{
+    border-bottom: 1px solid grey;
+}
+
+#alarmList .ListTable .ListItem .ListTime{
+    width: 70%;
+}
+
+#alarmList .ListTable .ListItem .toggleItem{
+    width: 20%;
+}
+
+#alarmList .ListTable .ListItem .ListBtn{
+    width: 10%;
+}
+
+#alarmList .ListTable .ListItem h3{
+    text-align: left;
+    margin-bottom: -0.4em;
+    font-size:24px; 
+}
+
+#alarmList .ListTable .ListItem h4{
+    text-align: left;
+    font-size:12px;
+}
+
+#optionBtn{
+    position:absolute;
+    width: 300px;
+    height: auto;
+    top: 110px; 
+    left: 0; 
+    bottom: 0; 
+    right: 0; 
+    margin: 0 auto;
+    text-align: right;
+}
+
+#optionController{
+    position:absolute;
+    width: 300px;
+    height: auto;
+    top: 135px; 
+    left: 0; 
+    bottom: 0; 
+    right: 0; 
+    margin: 0 auto;
+    text-align: center;
+}
+
+.optionBar{
+    -webkit-appearance: none;
+    width: 100%;
+    border-radius: 8px;
+    height: 15px;
+    border: 1.5px solid #bdc3c7;
+    background-color:lightyellow; 
+}
+
+.optionBar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: mediumaquamarine;
+    border-radius: 30px;
+    box-shadow: 0px 0px 3px blue;
+}
+
+#optionController output{
+    align-content: center;
+    text-align: center;
+    font-family: "Quantico", sans-serif;
+    font-size: 18px;
+    padding: 3px 0px;
+    color: #579E81;
+}
+
+.cmn-toggle {
+    position: absolute;
+    visibility: hidden;
+    margin: auto auto;
+}
+
+.cmn-toggle + label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+}
+
+input.cmn-toggle-round + label {
+    top:4px;
+    right: 2px;
+    padding: 2px;
+    width: 70px;
+    height: 30px;
+    background-color: #dddddd;
+    border-radius: 25px;
+}
+
+input.cmn-toggle-round + label:before,
+input.cmn-toggle-round + label:after {
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    bottom: 1px;
+    content: "";
+}
+input.cmn-toggle-round + label:before {
+    right: 1px;
+    background-color: #f1f1f1;
+    border-radius: 25px;
+    transition: background 0.4s;
+}
+input.cmn-toggle-round + label:after {
+    width: 27px;
+    background-color: #fff;
+    border-radius: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: margin 0.4s;
+}
+input.cmn-toggle-round:checked + label:before {
+    background-color: #8ce196;
+}
+input.cmn-toggle-round:checked + label:after {
+    margin-left: 41px;
+}
