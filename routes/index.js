@@ -14,11 +14,6 @@ module.exports.user = function (app, User, request) {
                 if (err) return res.status(500).send({ error: 'database failure' });
                 var t = {};
                 t = Object.assign(t, { "length": users.length });
-                users.forEach(function (user) {
-                    console.log(user.name);
-                    var data = '{"' + user.alarmNum + '":' + user.name + '}';
-                    t = Object.assign({}, t, JSON.parse(data));
-                })
                 var time = moment().format('YYMMDDHHmmssd');
                 res.json(Object.assign(t, { "time": time }));
             })
